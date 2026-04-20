@@ -76,8 +76,16 @@ Module DataModule
     Public Function TampilJoki() As DataTable
         Dim dt As New DataTable()
         Try
-            Dim query As String = "SELECT j.uid, j.username, j.password, j.detail, l.nama_layanan AS 'Jenis Layanan', j.kesulitan, j.total_harga " &
-                                 "FROM tb_joki j INNER JOIN tb_layanan l ON j.id_layanan = l.id_layanan ORDER BY j.uid ASC"
+            ' Perhatikan penambahan tanda koma setelah j.kesulitan
+            Dim query As String = "SELECT j.uid, j.username, j.password, j.detail, j.kesulitan, " &
+                             "l.nama_layanan AS 'Jenis Layanan', " &
+                             "s.nama_status AS 'Status', " &
+                             "j.total_harga " &
+                             "FROM tb_joki j " &
+                             "INNER JOIN tb_layanan l ON j.id_layanan = l.id_layanan " &
+                             "INNER JOIN tb_status s ON j.id_status = s.id_status " &
+                             "ORDER BY j.uid ASC"
+
             Using conn As MySqlConnection = GetConnection()
                 Using da As New MySqlDataAdapter(query, conn)
                     da.Fill(dt)
@@ -91,7 +99,9 @@ Module DataModule
 
     Public Function SimpanJoki(uid As String, user As String, pass As String, detail As String, id_lay As String, sulit As Integer, total As Integer) As Boolean
         Try
-            Dim query As String = "INSERT INTO tb_joki VALUES (@uid, @user, @pass, @detail, @id_lay, @sulit, @total)"
+            Dim query As String = "INSERT INTO tb_joki (uid, username, password, detail, id_layanan, kesulitan, total_harga, id_status) " &
+                              "VALUES (@uid, @user, @pass, @detail, @id_lay, @sulit, @total, 1)"
+
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
@@ -183,5 +193,42 @@ Module DataModule
             MessageBox.Show("Gagal memuat list layanan: " & ex.Message)
         End Try
         Return dt
+    End Function
+
+    ' Fungsi Update Status
+    Public Function UpdateStatusJoki(uid As String, id_status As String) As Boolean
+        Try
+            Dim query As String = "UPDATE tb_joki SET id_status=@id_status WHERE uid=@uid"
+            Using conn As MySqlConnection = GetConnection()
+                conn.Open()
+                Using cmd As New MySqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@uid", uid)
+                    cmd.Parameters.AddWithValue("@id_status", id_status)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            Return True
+        Catch ex As Exception
+            MessageBox.Show("Gagal update status: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    ' Fungsi Hitung Pendapatan (Hanya yang berstatus 'Selesai' / ID 3)
+    Public Function HitungTotalPendapatan() As Integer
+        Dim total As Integer = 0
+        Try
+            Dim query As String = "SELECT SUM(total_harga) FROM tb_joki WHERE id_status = 3"
+            Using conn As MySqlConnection = GetConnection()
+                conn.Open()
+                Using cmd As New MySqlCommand(query, conn)
+                    Dim result = cmd.ExecuteScalar()
+                    If result IsNot DBNull.Value Then total = Convert.ToInt32(result)
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Gagal hitung pendapatan: " & ex.Message)
+        End Try
+        Return total
     End Function
 End Module

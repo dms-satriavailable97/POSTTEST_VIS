@@ -121,4 +121,21 @@ Public Class Form1
         IsiComboLayanan()
     End Sub
 
+    Private Sub txtUID_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtUID.KeyPress
+        ValidationModule.HanyaAngka(e)
+    End Sub
+
+    Private Sub btnSelesai_Click(sender As Object, e As EventArgs) Handles btnSelesai.Click
+        If txtUID.Text = "" Then Exit Sub
+        If UpdateStatusJoki(txtUID.Text, "3") Then ' 3 = ID Status Selesai
+            MessageBox.Show("Status diupdate ke Selesai!")
+            TampilData()
+        End If
+    End Sub
+
+    Private Sub btnLihatPendapatan_Click(sender As Object, e As EventArgs) Handles btnLihatPendapatan.Click
+        Dim total As Integer = HitungTotalPendapatan()
+        MessageBox.Show("Total Pendapatan dari Order Selesai: Rp " & total.ToString("N0"), "Laporan Keuangan")
+    End Sub
+
 End Class

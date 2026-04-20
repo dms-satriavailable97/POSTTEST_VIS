@@ -44,6 +44,8 @@ Partial Class Form1
         PictureBox2 = New PictureBox()
         PictureBox3 = New PictureBox()
         PictureBox4 = New PictureBox()
+        btnLihatPendapatan = New Button()
+        btnSelesai = New Button()
         CType(dgvJoki, ComponentModel.ISupportInitialize).BeginInit()
         CType(ErrorProvider1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
@@ -142,7 +144,7 @@ Partial Class Form1
         dgvJoki.Location = New Point(20, 396)
         dgvJoki.Name = "dgvJoki"
         dgvJoki.RowHeadersWidth = 62
-        dgvJoki.Size = New Size(671, 257)
+        dgvJoki.Size = New Size(671, 205)
         dgvJoki.TabIndex = 15
         ' 
         ' btnSimpan
@@ -300,11 +302,37 @@ Partial Class Form1
         PictureBox4.TabIndex = 23
         PictureBox4.TabStop = False
         ' 
+        ' btnLihatPendapatan
+        ' 
+        btnLihatPendapatan.BackColor = Color.DarkRed
+        btnLihatPendapatan.Font = New Font("Magic R", 9F)
+        btnLihatPendapatan.ForeColor = SystemColors.Control
+        btnLihatPendapatan.Location = New Point(372, 607)
+        btnLihatPendapatan.Name = "btnLihatPendapatan"
+        btnLihatPendapatan.Size = New Size(319, 46)
+        btnLihatPendapatan.TabIndex = 24
+        btnLihatPendapatan.Text = "Lihat Pendapatan"
+        btnLihatPendapatan.UseVisualStyleBackColor = False
+        ' 
+        ' btnSelesai
+        ' 
+        btnSelesai.BackColor = Color.DarkRed
+        btnSelesai.Font = New Font("Magic R", 9F)
+        btnSelesai.ForeColor = SystemColors.Control
+        btnSelesai.Location = New Point(20, 607)
+        btnSelesai.Name = "btnSelesai"
+        btnSelesai.Size = New Size(342, 46)
+        btnSelesai.TabIndex = 25
+        btnSelesai.Text = "Update Selesai"
+        btnSelesai.UseVisualStyleBackColor = False
+        ' 
         ' Form1
         ' 
         BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), Image)
         BackgroundImageLayout = ImageLayout.Stretch
         ClientSize = New Size(1009, 665)
+        Controls.Add(btnSelesai)
+        Controls.Add(btnLihatPendapatan)
         Controls.Add(PictureBox4)
         Controls.Add(PictureBox3)
         Controls.Add(PictureBox2)
@@ -367,4 +395,6 @@ Partial Class Form1
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents PictureBox3 As PictureBox
     Friend WithEvents PictureBox4 As PictureBox
+    Friend WithEvents btnSelesai As Button
+    Friend WithEvents btnLihatPendapatan As Button
 End Class
